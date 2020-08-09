@@ -1,0 +1,6 @@
+
+<form action="{% if action_url %}{{action_url}}{% else %}{% url 'login' %}{% endif %}" method="post">
+{% csrf_token %}
+{{form}}
+<button type="submit">login</button>
+</form>

@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+
+
+    <h1> CONTACT PAGE</h1>
+
+    <form action="" method="POST">
+    {% csrf_token %}
+    <input type="text" placeholder="name" name="fullname"><br><br>
+    <input type="email" name="email"  placeholder="email"><br><br>
+    <textarea name="content" id="" cols="30" rows="10"  placeholder="your content"></textarea><br><br>
+    <button type="submit">submit</button>
+    </form>
+    <hr>
+    <br>
+    <form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}} 
+   <button type="submit">submit</button>
+    </form>{% endblock content %}
+
