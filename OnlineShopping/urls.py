@@ -22,7 +22,7 @@ from django.contrib.auth.views import LogoutView
 from addresses.views import checkout_address_create_view,checkout_address_reuse_view
 urlpatterns = [
     path('admin/', admin.site.urls),
-#    path('',home_page,name="home"),
+    path('',home_page,name="home"),
     path('about',about_page,name="about"),
     path('contact',contact_page,name="contact"),
     path('login',login_page,name="login"),
@@ -32,7 +32,7 @@ urlpatterns = [
     path('checkout/address/reuse',checkout_address_reuse_view,name="checkout_address_reuse"),
 
     path('logout',LogoutView.as_view(template_name="logout.html"),name="logout"),
-    path("" ,include("products.urls")),
+    path("products" ,include("products.urls")),
     path("search/" ,include("search.urls")),
     path("cart/" ,include("cart.urls")),
 

@@ -6,6 +6,11 @@ from orders.models import Order
 from OnlineShopping.forms import LoginForm,GuestForm
 from billing.models import BillingProfile,GuestEmail
 from addresses.models import Address
+from django.contrib.auth.decorators import login_required
+import stripe
+from django.urls import reverse
+
+stripe.api_key = "sk_test_IuOGDfRGnLAtweFksrmP3RRM00hqU6j3VY"
 
 """ def cart_create(user=None):
     cart_obj=Cart.objects.create(user=none)
@@ -98,7 +103,7 @@ def checkout_home(request):
             del request.session["shipping_address_id"]
         if billing_address_id :
             order_obj.billing_address= Address.objects.get(id=billing_address_id)    
-            del request.session["billing_address_id"]
+        #    del request.session["billing_address_id"]
         if shipping_address_id or billing_address_id:
             order_obj.save()
     if request.method=="POST":
@@ -106,9 +111,9 @@ def checkout_home(request):
         if is_done:  
             order_obj.mark_paid()
             request.session["cart_items"]=0
-            del request.session["cart_id"]
+        #    del request.session["cart_id"]
 
-            return redirect("cart:success")
+            return redirect("cart:success_checkout")
 
 
     context={"object":order_obj,
@@ -125,4 +130,35 @@ def checkout_home(request):
 
 
 def checkout_done_view(request):
-    return render(request, "checkout-done.html", {})
+    cart_obj,cart_created=Cart.objects.new_or_get(request)
+    billing_profile,billing_profile_created=BillingProfile.objects.new_or_get(request)
+
+    order_obj,order_obj_created=Order.objects.new_or_get(billing_profile,cart_obj)
+    return render(request, "checkout-done.html", {"order_obj":order_obj})
+
+@login_required
+def charge(request):
+    if request.method == 'POST':
+        print('Data:', request.POST)
+
+        amount=int(float(request.POST['amount']))
+
+        customer=stripe.Customer.create(
+			email=request.user.email,
+			name=request.user.username,
+			source=request.POST['stripeToken']
+			)
+			
+        charge=stripe.Charge.create(
+			customer=customer,
+			amount=amount*100,
+			currency="usd",
+			description="Donation",
+			)
+
+    return redirect(reverse('cart:success', args=[amount]))
+
+@login_required
+def successMsg(request, args):
+	amount = args
+	return render(request, 'success.html', {'amount':amount})

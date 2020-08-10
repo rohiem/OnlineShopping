@@ -34,7 +34,7 @@ class Order(models.Model):
 
     cart=models.ForeignKey(Cart, on_delete=models.CASCADE)
     status=models.CharField( max_length=150,default="created",choices=ORDER_STATUS_CHOICES)
-    shipping_total=models.DecimalField(default=0.00,max_digits=8, decimal_places=2)
+    shipping_total=models.DecimalField(default=9.00,max_digits=8, decimal_places=2 )
     total=models.DecimalField(default=0.00,max_digits=8, decimal_places=2)
     active=models.BooleanField(default=True)
     # order_total

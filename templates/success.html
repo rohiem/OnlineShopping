@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+	<div id="box">
+	<h1 style="color:#00FF00;" > <i class="fas fa-check"> </i>  YOU MADE A SUCCESSFUL TRANSFER</h1><br>
+		<h4>you paid ${{amount}}!</h4><br>
+		<hr>
+		<h3><a class="myButton" href="{% url 'contact' %}">&#x2190;contact us</a></h3>
+	</div>
+
+{% endblock content %}
